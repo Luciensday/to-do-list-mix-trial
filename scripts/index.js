@@ -86,7 +86,13 @@ export function createTaskUsingTemplate(item, group) {
     taskItem.classList.add("complete");
   }
   taskCircle.addEventListener("click", (event) => {
-    circleToggledItemAppareance(event, item, taskItem, taskCircle);
+    circleToggledItemAppareance(
+      event,
+      item,
+      taskItem,
+      taskCircle,
+      containerElement,
+    );
   });
 
   // remove Task
@@ -99,6 +105,11 @@ export function createTaskUsingTemplate(item, group) {
   // Update the groups array
   const currentGroup = findGroupById(containerElement.id);
   currentGroup.tasks.push(item);
+
+  // if complete is in show status, and list has any items that is complete. the item will be hidden
+  if (defaultHideCompleted && taskItem.classList.contains("complete")) {
+    taskItem.classList.add("hidden");
+  }
 }
 
 function circleToggledItemAppareance(
@@ -106,7 +117,7 @@ function circleToggledItemAppareance(
   item,
   taskItem,
   taskCircle,
-  taskList,
+  containerElement,
 ) {
   item.complete = !item.complete; // Toggle the complete property
   if (item.complete) {
@@ -116,16 +127,32 @@ function circleToggledItemAppareance(
     taskItem.classList.remove("complete");
     taskCircle.classList.remove("complete-circle");
   }
+
+  // Find the group's task list
+
+  const taskList = containerElement.querySelector(".listToDo");
+
   if (defaultHideCompleted) {
-    // If it's set to hide completed by default, hide the item. and then put the complete item to top of list
-    updateListOrder(taskList);
+    // If it's set to hide completed by default, hide the item.
     taskItem.classList.add("hidden");
-  } else {
-    // if it's not hidden, then just simple put the completed items to the top of the list
-    updateListOrder(taskList);
   }
 
+  // Move the taskItem to the top of the task list within its group
+  taskList.insertBefore(taskItem, taskList.firstChild);
+
   save();
+}
+
+function hideCompleted() {
+  defaultHideCompleted = true; // Set the flag to hide completed items
+  const completedItems = document.querySelectorAll(".complete");
+  completedItems.forEach((item) => item.classList.add("hidden"));
+}
+function showCompleted() {
+  defaultHideCompleted = false; // Set the flag to show completed items
+  const completedItems = document.querySelectorAll(".complete");
+  completedItems.forEach((item) => item.classList.remove("hidden"));
+  updateListOrder(); // Move completed items to the top
 }
 
 function handleTaskDeleteButton(item, taskItem, containerElement) {
