@@ -7,7 +7,7 @@ let groups = [];
 
 // Function to find a group by ID
 function findGroupById(groupId) {
-  return groups.find((g) => g.id === groupId);
+  return groups.find((g) => g.id == groupId);
 }
 
 // Unique Id Counters
@@ -70,7 +70,7 @@ function deleteTask(event) {
 // Create task
 export function createTaskUsingTemplate(item, group) {
   const containerElement = document.querySelector(group);
-  const taskList = containerElement.querySelector("#listToDo");
+  const taskList = containerElement.querySelector(".listToDo");
 
   const template = document.querySelector("#taskTemplate");
   const domFragment = template.content.cloneNode(true);
@@ -89,13 +89,25 @@ export function createTaskUsingTemplate(item, group) {
     circleToggledItemAppareance(event, item, taskItem, taskCircle);
   });
 
+  // remove Task
+  const deleteTaskButton = domFragment.querySelector(".deleteTaskButton");
+  deleteTaskButton.addEventListener("click", () => {
+    handleTaskDeleteButton(item, taskItem, containerElement);
+  });
+
   taskList.appendChild(domFragment);
   // Update the groups array
-  const currentGroup = findGroupById(group);
+  const currentGroup = findGroupById(containerElement.id);
   currentGroup.tasks.push(item);
 }
 
-function circleToggledItemAppareance(event, item, taskItem, taskCircle) {
+function circleToggledItemAppareance(
+  event,
+  item,
+  taskItem,
+  taskCircle,
+  taskList,
+) {
   item.complete = !item.complete; // Toggle the complete property
   if (item.complete) {
     taskItem.classList.add("complete");
@@ -104,16 +116,32 @@ function circleToggledItemAppareance(event, item, taskItem, taskCircle) {
     taskItem.classList.remove("complete");
     taskCircle.classList.remove("complete-circle");
   }
-  // if (defaultHideCompleted) {
-  //   // If it's set to hide completed by default, hide the item. and then put the complete item to top of list
-  //   updateListOrder(domFragment);
-  //   domFragment.classList.add("hidden");
-  // } else {
-  //   // if it's not hidden, then just simple put the completed items to the top of the list
-  //   updateListOrder(domFragment);
-  // }
+  if (defaultHideCompleted) {
+    // If it's set to hide completed by default, hide the item. and then put the complete item to top of list
+    updateListOrder(taskList);
+    taskItem.classList.add("hidden");
+  } else {
+    // if it's not hidden, then just simple put the completed items to the top of the list
+    updateListOrder(taskList);
+  }
 
   save();
+}
+
+function handleTaskDeleteButton(item, taskItem, containerElement) {
+  // Find the index of the item to be removed
+  const currentGroup = findGroupById(containerElement.id);
+  const groupArray = currentGroup.tasks;
+
+  console.log(groupArray);
+  const itemIndex = groupArray.findIndex((t) => t.id === item.id);
+  if (itemIndex !== -1) {
+    // Remove the item from the toDo array
+    groupArray.splice(itemIndex, 1);
+    // Update the DOM
+    taskItem.remove();
+    save();
+  }
 }
 
 // Add group
@@ -161,6 +189,8 @@ export function createGroupUsingTemplate(groupName) {
     name: groupName || "",
     tasks: [],
   });
+
+  console.log(groups);
 }
 
 // Delete Group
