@@ -217,7 +217,7 @@ export function createGroupUsingTemplate(groupName) {
     tasks: [],
   });
 
-  console.log(groups);
+  createFolder(groupTitle, uniqueId);
 }
 
 // Delete Group
@@ -228,6 +228,22 @@ function deleteGroup(groupId) {
   } else {
     console.error(`No element found with ID ${groupId}`);
   }
+}
+
+function createFolder(groupTitle, uniqueId) {
+  const sideBarContainer = document.querySelector("#sidebar");
+  const template = document.querySelector("#folderTemplate");
+  const domFragment = template.content.cloneNode(true);
+
+  //  set folder ID
+  const folderContainer = domFragment.querySelector(".folderContainer");
+  folderContainer.classList.add(uniqueId);
+
+  //  set folder title
+  const folderTitle = domFragment.querySelector(".folderTitle");
+  folderTitle.innerText = groupTitle.value;
+
+  sideBarContainer.appendChild(domFragment);
 }
 
 // Create initial default groups

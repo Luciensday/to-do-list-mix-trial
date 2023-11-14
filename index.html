@@ -23,12 +23,17 @@
 
     <div class="outerFlex">
       <div class="groupsContainer"></div>
-      <div id="sidebar">
-        <h2>ComP</h2>
-        <ul id="completedList"></ul>
-      </div>
+      <div id="sidebar"></div>
     </div>
   </body>
+
+  <template id="folderTemplate">
+    <div class="folderContainer">
+      <h2 class="folderTitle"></h2>
+      <p class="folderCompletedNumber"></p>
+      <p class="folderToDoNumber"></p>
+    </div>
+  </template>
 
   <template id="groupTemplate">
     <div class="tasksContainer">
