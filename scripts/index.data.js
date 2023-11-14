@@ -1,4 +1,1 @@
-export const deafultGroups = [
-  { groupName: "To-Do" },
-  { groupName: "In Progress" },
-];
+export const deafultGroups = [{ groupName: "Work" }, { groupName: "Personal" }];

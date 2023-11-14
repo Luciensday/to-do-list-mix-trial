@@ -17,6 +17,8 @@
 
   <body>
     <h1>Task Manager</h1>
+    <button id="showHideCompleted">show completed</button>
+
     <button id="createGroupButton"></button>
 
     <div class="outerFlex">
@@ -24,8 +26,6 @@
       <div id="sidebar">
         <h2>ComP</h2>
         <ul id="completedList"></ul>
-        <button type="button" id="clearTasksButton">Clear Tasks</button>
-        <div id="toggleSidebar" class="sidebar-toggle"></div>
       </div>
     </div>
   </body>
@@ -39,8 +39,8 @@
       <div class="listAndField">
         <ul id="listToDo"></ul>
         <div class="addTaskFieldAndButton">
+          <div class="circle"></div>
           <input class="addTaskField" placeholder="Add task" />
-          <button class="addTaskButton">+</button>
         </div>
       </div>
     </div>
@@ -48,8 +48,9 @@
 
   <template id="taskTemplate">
     <li class="taskItem">
+      <div class="circle"></div>
       <input type="text" class="taskText" />
-      <button class="moveToCompleted"></button>
+      <button class="deleteTaskButton">X</button>
     </li>
   </template>
 </html>

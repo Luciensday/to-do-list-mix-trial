@@ -1,6 +1,15 @@
 // Deafult Groups
 import { deafultGroups } from "./index.data.js";
 
+// Lucien import
+let defaultHideCompleted = true; // A flag to set the default state to hide completed
+let groups = [];
+
+// Function to find a group by ID
+function findGroupById(groupId) {
+  return groups.find((g) => g.id === groupId);
+}
+
 // Unique Id Counters
 let groupId = 1;
 let taskId = 1;
@@ -16,6 +25,16 @@ function generateUniqueGroupID() {
   groupId++;
   return uniqueGroupID;
 }
+// Show/hind button change text
+showHideCompleted.addEventListener("click", function () {
+  if (showHideCompleted.textContent == "show completed") {
+    showHideCompleted.textContent = "hide completed";
+    showCompleted();
+  } else {
+    showHideCompleted.textContent = "show completed";
+    hideCompleted();
+  }
+});
 
 // Function to handle the 'Enter' key in addTaskFields
 function handleAddTaskFieldEnter(event, group) {
@@ -24,7 +43,7 @@ function handleAddTaskFieldEnter(event, group) {
     const taskText = inputField.value.trim();
 
     const item = {
-      id: "",
+      id: generateUniqueTaskID(),
       text: taskText,
       complete: false,
       category: group,
@@ -36,6 +55,7 @@ function handleAddTaskFieldEnter(event, group) {
 
     // Clear the input field after adding the task
     inputField.value = "";
+    save();
   }
 }
 
@@ -58,11 +78,44 @@ export function createTaskUsingTemplate(item, group) {
   const taskItem = domFragment.querySelector(".taskItem");
 
   field.value = item.text;
-  taskItem.id = generateUniqueTaskID();
-  item.id = taskItem.id;
+  taskItem.id = item.id;
+
+  // // Completed circle
+  // const circle = domFragment.querySelector(".circle");
+  // if (item.complete) {
+  //   itemElement.classList.add("complete");
+  // }
+  // circle.addEventListener(
+  //   "click",
+  //   circleToggledItemAppareance(item, domFragment, circle),
+  // );
 
   taskList.appendChild(domFragment);
+  // Update the groups array
+  const currentGroup = findGroupById(group);
+  currentGroup.tasks.push(item);
 }
+
+// function circleToggledItemAppareance(item, domFragment, circle) {
+//   item.complete = !item.complete; // Toggle the complete property
+//   if (item.complete) {
+//     domFragment.classList.add("complete");
+//     circle.classList.add("complete-circle");
+//   } else {
+//     domFragment.classList.remove("complete");
+//     circle.classList.remove("complete-circle");
+//   }
+//   if (defaultHideCompleted) {
+//     // If it's set to hide completed by default, hide the item. and then put the complete item to top of list
+//     updateListOrder(domFragment);
+//     domFragment.classList.add("hidden");
+//   } else {
+//     // if it's not hidden, then just simple put the completed items to the top of the list
+//     updateListOrder(domFragment);
+//   }
+
+//   save();
+// }
 
 // Add group
 export function createGroupUsingTemplate(groupName) {
@@ -101,6 +154,13 @@ export function createGroupUsingTemplate(groupName) {
   // Using requestAnimationFrame to ensure the focus occurs after any reflows or repaints
   requestAnimationFrame(() => {
     groupTitle.focus();
+  });
+
+  // Update the groups array
+  groups.push({
+    id: uniqueId,
+    name: groupName || "",
+    tasks: [],
   });
 }
 
