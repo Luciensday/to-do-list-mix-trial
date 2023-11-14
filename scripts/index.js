@@ -80,15 +80,14 @@ export function createTaskUsingTemplate(item, group) {
   field.value = item.text;
   taskItem.id = item.id;
 
-  // // Completed circle
-  // const circle = domFragment.querySelector(".circle");
-  // if (item.complete) {
-  //   itemElement.classList.add("complete");
-  // }
-  // circle.addEventListener(
-  //   "click",
-  //   circleToggledItemAppareance(item, domFragment, circle),
-  // );
+  // Completed circle
+  const taskCircle = domFragment.querySelector(".taskCircle");
+  if (item.complete) {
+    taskItem.classList.add("complete");
+  }
+  taskCircle.addEventListener("click", (event) => {
+    circleToggledItemAppareance(event, item, taskItem, taskCircle);
+  });
 
   taskList.appendChild(domFragment);
   // Update the groups array
@@ -96,26 +95,26 @@ export function createTaskUsingTemplate(item, group) {
   currentGroup.tasks.push(item);
 }
 
-// function circleToggledItemAppareance(item, domFragment, circle) {
-//   item.complete = !item.complete; // Toggle the complete property
-//   if (item.complete) {
-//     domFragment.classList.add("complete");
-//     circle.classList.add("complete-circle");
-//   } else {
-//     domFragment.classList.remove("complete");
-//     circle.classList.remove("complete-circle");
-//   }
-//   if (defaultHideCompleted) {
-//     // If it's set to hide completed by default, hide the item. and then put the complete item to top of list
-//     updateListOrder(domFragment);
-//     domFragment.classList.add("hidden");
-//   } else {
-//     // if it's not hidden, then just simple put the completed items to the top of the list
-//     updateListOrder(domFragment);
-//   }
+function circleToggledItemAppareance(event, item, taskItem, taskCircle) {
+  item.complete = !item.complete; // Toggle the complete property
+  if (item.complete) {
+    taskItem.classList.add("complete");
+    taskCircle.classList.add("complete-circle");
+  } else {
+    taskItem.classList.remove("complete");
+    taskCircle.classList.remove("complete-circle");
+  }
+  // if (defaultHideCompleted) {
+  //   // If it's set to hide completed by default, hide the item. and then put the complete item to top of list
+  //   updateListOrder(domFragment);
+  //   domFragment.classList.add("hidden");
+  // } else {
+  //   // if it's not hidden, then just simple put the completed items to the top of the list
+  //   updateListOrder(domFragment);
+  // }
 
-//   save();
-// }
+  save();
+}
 
 // Add group
 export function createGroupUsingTemplate(groupName) {

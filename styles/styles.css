@@ -247,7 +247,8 @@ p,
 
 /* >>>> */
 
-.circle {
+.taskCircle,
+circle {
   width: 20px;
   height: 20px;
   border: 1px dotted #ccc; /* Dotted border for the circle */
