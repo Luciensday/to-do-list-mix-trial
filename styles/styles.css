@@ -112,6 +112,7 @@ h1 {
   flex-direction: column;
   justify-content: space-between;
   gap: 1rem;
+  padding: 2rem;
 }
 
 .listAndField {
@@ -122,6 +123,7 @@ h1 {
 }
 
 /* list item */
+
 ul {
   padding: 0;
   list-style-type: none;
