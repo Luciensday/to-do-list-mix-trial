@@ -1,7 +1,6 @@
 // Deafult Groups
 import { deafultGroups } from "./index.data.js";
 
-// Lucien import
 let defaultHideCompleted = true; // A flag to set the default state to hide completed
 let groups = [];
 
@@ -9,6 +8,17 @@ let groups = [];
 function findGroupById(groupId) {
   return groups.find((g) => g.id == groupId);
 }
+
+//Display Mobile menu
+const menu = document.querySelector("#mobile-menu");
+const menuLinks = document.querySelector(".sidebar");
+
+const mobileMenu = () => {
+  menu.classList.toggle("is-active");
+  menuLinks.classList.toggle("active");
+};
+
+menu.addEventListener("click", mobileMenu);
 
 // Unique Id Counters
 let groupId = 1;
