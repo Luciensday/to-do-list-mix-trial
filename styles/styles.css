@@ -1,153 +1,130 @@
 /*Global variables*/
 :root {
   --medium-dark-grey: rgba(37, 37, 37, 0.719);
-  --font: "Roboto", sans-serif;
 
   --toDoColour: #a3cef1;
   --inProgressColour: #ffca28;
   --completedColour: #81c784;
-
   --box-shadow-light: 0 0 1.25rem rgba(0, 0, 0, 0.58);
   --box-shadow-hard: 0 0 3.75rem rgba(0, 0, 0, 0.9);
+
+  --sideBar-linear-dark-blue: #909fea;
+  --sideBar-linear-green: #9ff5ea;
+  --sideBar-linear-white: #eef1e5;
+  --folder-blue: #6c7ea6;
+  --black: #000000;
+  --white: #ffffff;
+  --blue: #5226ff;
+  --font-inter: "Inter", sans-serif;
 }
 
 body {
-  margin: 3rem;
-  margin-right: 0;
+  width: 100vw;
   padding: 0;
-  font-family: var(--font);
+  margin: 0;
 }
 
-h1 {
+/* h1 {
   font-size: 2rem;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 0;
   width: fit-content;
-}
+} */
 
+/* sidebar  */
+.folderContainer {
+  background-color: var(--folder-blue);
+  width: 7rem;
+  height: 5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  border-radius: 20%;
+}
 h2 {
-  font-size: 1.5em;
+  font-size: 0.8em;
+  color: var(--white);
   margin-top: 0;
   margin-bottom: 0.5rem;
   text-align: center;
-  font-weight: normal;
+  font-family: var(--font-inter);
+  font-weight: 400;
 }
 
 .groupTitle {
-  font-size: 1.5rem;
-  margin: 0;
-  margin-left: auto;
-  margin-right: auto;
+  font-size: 1.3rem;
   background-color: transparent;
   border: none;
-  width: 100%;
-  outline: none;
+  width: fit-content;
+  color: var(--blue);
+  font-weight: 600;
 }
 
+#sidebar {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  box-shadow: var(--box-shadow-light);
+  padding: 2rem;
+  height: fit-content;
+
+  background: linear-gradient(
+    90deg,
+    var(--sideBar-linear-dark-blue) 0%,
+    var(--white) 100%
+  );
+}
+
+/* Topbar */
+h1 {
+  font-size: 2rem;
+  font-family: var(--font-inter);
+  margin-bottom: 0;
+}
 .topBar {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
+#showHideCompleted {
+  background: none;
+  border: none;
+  width: fit-content;
+  font-family: var(--font-inter);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+}
 
 .outerFlex {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 1rem;
   height: 70vh;
 }
 
-/* .hidden {
-  width: 5rem !important;
-} */
-
-#sidebar {
-  display: block;
-  position: relative;
-  width: 200%;
-  background-color: beige;
-  box-shadow: var(--box-shadow-light);
-  padding-left: 1.5rem;
-  padding-top: 0.2rem;
-  padding-bottom: 0.5rem;
-  padding-right: 0;
-  overflow: hidden;
-  transition: width 0.3s ease;
-  border-radius: 0.2rem;
-  height: fit-content;
-  min-height: 10rem;
-}
-
-/* Since we're toggling the hidden class, we'll use one arrow image that indicates expansion */
-.hidden .sidebar-toggle {
-  background-image: url("../images/left.png");
-}
-
-.sidebar-toggle {
-  position: absolute;
-  left: 0px; /* Align to the left edge of the sidebar */
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%);
-  width: 1.5rem;
-  height: 1.5rem;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  box-shadow: 0px 1px 10px rgba(0, 0, 0, 1);
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-/* Ensure .sidebar-toggle is always visible */
-#sidebar:not(.hidden) .sidebar-toggle {
-  background-image: url("../images/right.png"); /* Arrow pointing left when sidebar is not hidden */
-}
-
 .groupsContainer {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-content: flex-start;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.tasksContainer {
-  display: block;
-  flex: 1 1 calc(33.333% - 2rem);
   flex-direction: column;
   justify-content: space-between;
-  min-width: 10rem;
-  /* max-width: 30%;*/
-  height: fit-content;
-  min-height: 10rem;
-  border-radius: 0.2rem;
-  padding: 0.4rem;
-  box-shadow: var(--box-shadow-light);
-}
-
-.groupTitle {
-  height: 1.5rem;
+  gap: 1rem;
 }
 
 .listAndField {
   display: flex;
   flex-direction: column;
-  min-height: 8rem;
+
   justify-content: space-between;
 }
 
+/* list item */
 ul {
   padding: 0;
   list-style-type: none;
-}
-
-li {
-  white-space: nowrap;
-  flex-wrap: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .taskItem,
@@ -156,29 +133,30 @@ li {
   justify-content: space-between;
   font-size: medium;
   border-style: none;
-  border-radius: 0.2rem;
+
   list-style-type: none;
   padding: 0.2rem 0.2rem;
-  background-color: beige;
+
   margin-bottom: 0.2rem;
-  box-shadow: var(--box-shadow-light);
+
   transition: transform 0.15s ease;
   outline: none;
 }
 
+.addTaskField,
+.taskText {
+  border-bottom: 0.1rem solid black;
+}
+
 .taskItem:focus,
-.taskItem:hover,
-.addTaskField:focus,
-.addTaskField:hover {
-  transform: scale(1.03);
-  box-shadow: var(--box-shadow-hard);
+.addTaskField:focus {
   background-color: rgb(275, 275, 250);
+  border-bottom: 0.1rem solid black;
 }
 
 .addTaskFieldAndButton {
   display: flex;
-  width: 100%;
-  justify-content: space-between;
+  width: 85%;
   gap: 0.2rem;
 }
 
@@ -189,19 +167,15 @@ li {
   text-align: left;
 }
 
-p,
 .taskText,
 .taskText:focus,
 .taskText:hover {
-  white-space: nowrap;
-  flex-wrap: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin: 0;
   background-color: transparent;
   border: none;
   outline: none;
-  width: 100%;
+  width: 80%;
+  border-bottom: 0.1rem solid black;
 }
 
 #createGroupButton {
@@ -215,20 +189,6 @@ p,
   outline: none;
   padding: 10px 20px;
   cursor: pointer;
-  margin-bottom: 1rem;
-}
-
-.moveToCompleted {
-  background-image: url("../images/check.png");
-  background-color: transparent;
-  height: 1rem;
-  width: 1rem;
-  background-size: cover;
-  background-repeat: no-repeat;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  margin: 0;
 }
 
 .deleteGroupButton {
@@ -237,18 +197,8 @@ p,
   width: auto;
 }
 
-#clearTasksButton {
-  position: absolute;
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 1.5rem;
-}
-
-/* >>>> */
-
 .taskCircle,
-circle {
+.circle {
   width: 20px;
   height: 20px;
   border: 1px dotted #ccc; /* Dotted border for the circle */
@@ -263,4 +213,25 @@ circle {
 
 .hidden {
   display: none;
+}
+
+/* medium screen */
+
+@media (min-width: 370px) {
+  #sidebar {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    box-shadow: var(--box-shadow-light);
+    padding: 2rem;
+    height: fit-content;
+    flex-wrap: wrap;
+
+    background: linear-gradient(
+      180deg,
+      var(--sideBar-linear-dark-blue) 0%,
+      var(--sideBar-linear-green) 60%,
+      var(--sideBar-linear-white) 100%
+    );
+  }
 }

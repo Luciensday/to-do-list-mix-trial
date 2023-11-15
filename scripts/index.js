@@ -172,7 +172,7 @@ function handleTaskDeleteButton(item, taskItem, containerElement) {
 }
 
 // Add group
-export function createGroupUsingTemplate(groupName) {
+function createGroupUsingTemplate(groupName) {
   const containerElement = document.querySelector(".groupsContainer");
   const template = document.querySelector("#groupTemplate");
   const domFragment = template.content.cloneNode(true);
@@ -180,6 +180,15 @@ export function createGroupUsingTemplate(groupName) {
   // Define the group title
   const groupTitle = domFragment.querySelector(".groupTitle");
   const uniqueId = generateUniqueGroupID();
+
+  // // Promise that resolves when the group title has text
+  // const groupNamePromise = new Promise((resolve) => {
+  //   groupTitle.addEventListener("input", function inputHandler() {
+  //     // Remove the event listener after input is detected
+  //     groupTitle.removeEventListener("input", inputHandler);
+  //     resolve(groupTitle.value.trim());
+  //   });
+  // });
 
   if (groupName) {
     groupTitle.value = groupName;
@@ -218,6 +227,22 @@ export function createGroupUsingTemplate(groupName) {
   });
 
   createFolder(groupTitle, uniqueId);
+
+  // Wait for the user to input text in the group title
+  // groupNamePromise.then((userGroupName) => {
+  //   // Update the groups array
+  //   const newGroup = {
+  //     id: uniqueId,
+  //     name: userGroupName || "",
+  //     tasks: [],
+  //   };
+
+  //   groups.push(newGroup);
+
+  //   if (userGroupName) {
+  //     createFolder(userGroupName, uniqueId);
+  //   }
+  // });
 }
 
 // Delete Group
