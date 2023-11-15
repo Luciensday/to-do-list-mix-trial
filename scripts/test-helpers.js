@@ -1,31 +1,36 @@
-export function equal(actual, expected, message) {
-	if (actual === expected) {
-		const defaultMessage = `Expected ${expected} and received ${actual}`
-		console.info('Pass: ' + (message || defaultMessage))
-	} else {
-		const defaultMessage = `Expected ${expected} but received ${actual} instead`
-		console.error('Fail: ' + (message || defaultMessage))
-	}
+function equal(actual, expected, message) {
+  if (actual === expected) {
+    const defaultMessage = `Expected ${expected} and received ${actual}`;
+    console.info("Pass: " + (message || defaultMessage));
+  } else {
+    const defaultMessage = `Expected ${expected} but received ${actual} instead`;
+    console.error("Fail: " + (message || defaultMessage));
+  }
 }
 
-export function notEqual(actual, expected, message) {
-	if (actual !== expected) {
-		const defaultMessage = `${expected} is different to ${actual}`
-		console.info('Pass: ' + (message || defaultMessage))
-	} else {
-		const defaultMessage = `${expected} is the same as ${actual}`
-		console.error('Fail: ' + (message || defaultMessage))
-	}
+function notEqual(actual, expected, message) {
+  if (actual !== expected) {
+    const defaultMessage = `${expected} is different to ${actual}`;
+    console.info("Pass: " + (message || defaultMessage));
+  } else {
+    const defaultMessage = `${expected} is the same as ${actual}`;
+    console.error("Fail: " + (message || defaultMessage));
+  }
 }
 
-export function test(name, testFunction) {
+function test(name, testFunction) {
   console.group(name);
-  testFunction().then(() => {
-      console.groupEnd();
-  }).catch(error => {
-      console.error('Test failed:', error);
-      console.groupEnd();
-  });
+  testFunction();
+  console.groupEnd(name);
+}
+
+function assert(condition, message) {
+  if (!condition) {
+    console.error("Fail: " + message);
+  }
+  else {
+    console.info("Pass: " + message);
+  }
 }
 
 
