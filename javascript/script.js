@@ -76,7 +76,7 @@ function deleteTask(event) {
 }
 
 // Create task
-export function createTaskUsingTemplate(item, group) {
+function createTaskUsingTemplate(item, group) {
   const containerElement = document.querySelector(group);
   const taskList = containerElement.querySelector(".listToDo");
 

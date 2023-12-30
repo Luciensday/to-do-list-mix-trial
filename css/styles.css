@@ -1,13 +1,11 @@
 /*Global variables*/
 :root {
   --medium-dark-grey: rgba(37, 37, 37, 0.719);
-
   --toDoColour: #a3cef1;
   --inProgressColour: #ffca28;
   --completedColour: #81c784;
   --box-shadow-light: 0 0 1.25rem rgba(0, 0, 0, 0.58);
   --box-shadow-hard: 0 0 3.75rem rgba(0, 0, 0, 0.9);
-
   --sideBar-linear-dark-blue: #909fea;
   --sideBar-linear-green: #9ff5ea;
   --sideBar-linear-white: #eef1e5;
