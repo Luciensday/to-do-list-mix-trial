@@ -13,10 +13,6 @@ function findGroupById(groupId) {
 const menu = document.querySelector("#mobile-menu");
 const menuLinks = document.querySelector(".sidebar");
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Don't test below
-
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Don't test above
-
 // Unique Id Counters
 let groupId = 1;
 let taskId = 1;
@@ -32,6 +28,7 @@ function generateUniqueGroupID() {
   groupId++;
   return uniqueGroupID;
 }
+
 let showHideCompleted = document.querySelector("#showHideCompleted");
 // Show/hind button change text
 showHideCompleted.addEventListener("click", function () {
@@ -43,6 +40,71 @@ showHideCompleted.addEventListener("click", function () {
     hideCompleted();
   }
 });
+
+// first: group is created
+
+function createGroupUsingTemplate(groupName) {
+  const containerElement = document.querySelector(".groupsContainer");
+  const template = document.querySelector("#groupTemplate");
+  const domFragment = template.content.cloneNode(true);
+
+  // Define the group title
+  const groupTitle = domFragment.querySelector(".groupTitle");
+  const uniqueId = generateUniqueGroupID();
+
+  // // Promise that resolves when the group title has text
+  // const groupNamePromise = new Promise((resolve) => {
+  //   groupTitle.addEventListener("input", function inputHandler() {
+  //     // Remove the event listener after input is detected
+  //     groupTitle.removeEventListener("input", inputHandler);
+  //     resolve(groupTitle.value.trim());
+  //   });
+  // });
+
+  if (groupName) {
+    groupTitle.value = groupName;
+    groupTitle.setAttribute("tabindex", uniqueId.toString());
+  }
+
+  // Delete Button
+  const deleteButton = domFragment.querySelector(".deleteGroupButton");
+  deleteButton.addEventListener("click", () => deleteGroup(uniqueId));
+
+  // Assign an ID
+  domFragment.querySelector(".tasksContainer").id = uniqueId;
+  domFragment.querySelector(".addTaskField").id = `addTaskField-${uniqueId}`;
+  const field = domFragment.querySelector(".addTaskField");
+  field.addEventListener("keypress", (event) =>
+    handleAddTaskFieldEnter(event, `#${uniqueId}`),
+  );
+
+  containerElement.appendChild(domFragment);
+
+  // After appending, set the focus on the group title
+  // Using requestAnimationFrame to ensure the focus occurs after any reflows or repaints
+  requestAnimationFrame(() => {
+    groupTitle.focus();
+  });
+
+  // Update the groups array
+  groups.push({
+    id: uniqueId,
+    name: groupName || "",
+    tasks: [],
+  });
+
+  createFolder(groupTitle, uniqueId);
+}
+
+// Delete Group
+function deleteGroup(groupId) {
+  const groupElement = document.getElementById(groupId);
+  if (groupElement) {
+    groupElement.remove(); // Removes the whole group container
+  } else {
+    console.error(`No element found with ID ${groupId}`);
+  }
+}
 
 // Function to handle the 'Enter' key in addTaskFields
 function handleAddTaskFieldEnter(event, group) {
@@ -77,6 +139,7 @@ function deleteTask(event) {
 
 // Create task
 function createTaskUsingTemplate(item, group) {
+  //goup is an id number, e.g #${uniqueId}
   const containerElement = document.querySelector(group);
   const taskList = containerElement.querySelector(".listToDo");
 
@@ -176,76 +239,6 @@ function handleTaskDeleteButton(item, taskItem, containerElement) {
     // Update the DOM
     taskItem.remove();
     save();
-  }
-}
-
-// Add group
-function createGroupUsingTemplate(groupName) {
-  const containerElement = document.querySelector(".groupsContainer");
-  const template = document.querySelector("#groupTemplate");
-  const domFragment = template.content.cloneNode(true);
-
-  // Define the group title
-  const groupTitle = domFragment.querySelector(".groupTitle");
-  const uniqueId = generateUniqueGroupID();
-
-  // // Promise that resolves when the group title has text
-  // const groupNamePromise = new Promise((resolve) => {
-  //   groupTitle.addEventListener("input", function inputHandler() {
-  //     // Remove the event listener after input is detected
-  //     groupTitle.removeEventListener("input", inputHandler);
-  //     resolve(groupTitle.value.trim());
-  //   });
-  // });
-
-  if (groupName) {
-    groupTitle.value = groupName;
-    groupTitle.setAttribute("tabindex", uniqueId.toString());
-  }
-
-  // Delete Button
-  const deleteButton = domFragment.querySelector(".deleteGroupButton");
-  deleteButton.addEventListener("click", () => deleteGroup(uniqueId));
-
-  // Assign an ID
-  domFragment.querySelector(".tasksContainer").id = uniqueId;
-  domFragment.querySelector(".addTaskField").id = `addTaskField-${uniqueId}`;
-  const field = domFragment.querySelector(".addTaskField");
-  field.addEventListener("keypress", (event) =>
-    handleAddTaskFieldEnter(event, `#${uniqueId}`),
-  );
-
-  // Find the addTaskField and addTaskButton inside the domFragment
-  const addTaskField = domFragment.querySelector(".addTaskField");
-  const addTaskButton = domFragment.querySelector(".addTaskButton");
-
-  containerElement.appendChild(domFragment);
-
-  // After appending, set the focus on the group title
-  // Using requestAnimationFrame to ensure the focus occurs after any reflows or repaints
-  requestAnimationFrame(() => {
-    groupTitle.focus();
-  });
-
-  // Update the groups array
-  groups.push({
-    id: uniqueId,
-    name: groupName || "",
-    tasks: [],
-  });
-
-  createFolder(groupTitle, uniqueId);
-}
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Don't test below
-
-// Delete Group
-function deleteGroup(groupId) {
-  const groupElement = document.getElementById(groupId);
-  if (groupElement) {
-    groupElement.remove(); // Removes the whole group container
-  } else {
-    console.error(`No element found with ID ${groupId}`);
   }
 }
 
