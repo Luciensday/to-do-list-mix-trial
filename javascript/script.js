@@ -56,7 +56,7 @@ newGroupButton.addEventListener("click", () => {
 
 // first: group is created
 
-function createGroupUsingTemplate(groupName) {
+async function createGroupUsingTemplate(groupName) {
   const containerElement = document.querySelector(".groupsContainer");
   const template = document.querySelector("#groupTemplate");
   const domFragment = template.content.cloneNode(true);
@@ -65,18 +65,15 @@ function createGroupUsingTemplate(groupName) {
   const groupTitle = domFragment.querySelector(".groupTitle");
   const uniqueId = generateUniqueGroupID();
 
-  // // Promise that resolves when the group title has text
-  // const groupNamePromise = new Promise((resolve) => {
-  //   groupTitle.addEventListener("input", function inputHandler() {
-  //     // Remove the event listener after input is detected
-  //     groupTitle.removeEventListener("input", inputHandler);
-  //     resolve(groupTitle.value.trim());
-  //   });
-  // });
-
   if (groupName) {
     groupTitle.value = groupName;
     groupTitle.setAttribute("tabindex", uniqueId.toString());
+    folderTitle = createFolder(groupTitle, uniqueId);
+  } else {
+    folderTitle = createFolder(groupTitle, uniqueId);
+    groupTitle.addEventListener("input", function () {
+      folderTitle.innerText = groupTitle.value;
+    });
   }
 
   // Delete Button
@@ -133,17 +130,31 @@ function createGroupUsingTemplate(groupName) {
     name: groupName || "",
     tasks: [],
   });
-
-  createFolder(groupTitle, uniqueId);
 }
 
-// Remove Task
-function deleteTask(event) {
-  const task = event.target;
-  if (task.value.length === 0) {
-    task.parentElement.remove();
-  }
+function createFolder(groupTitle, uniqueId) {
+  const sideBarContainer = document.querySelector("#sidebar");
+  const template = document.querySelector("#folderTemplate");
+  const domFragment = template.content.cloneNode(true);
+
+  //  set folder ID
+  const folderContainer = domFragment.querySelector(".folderContainer");
+  folderContainer.classList.add(uniqueId);
+
+  //  set folder title
+  const folderTitle = domFragment.querySelector(".folderTitle");
+  folderTitle.innerText = groupTitle.value;
+
+  sideBarContainer.appendChild(domFragment);
+  return folderTitle;
 }
+// // Remove Task
+// function deleteTask(event) {
+//   const task = event.target;
+//   if (task.value.length === 0) {
+//     task.parentElement.remove();
+//   }
+// }
 
 // Create task
 function createTaskUsingTemplate(item, group) {
@@ -235,22 +246,6 @@ function handleTaskDeleteButton(item, taskItem, containerElement) {
     taskItem.remove();
     save();
   }
-}
-
-function createFolder(groupTitle, uniqueId) {
-  const sideBarContainer = document.querySelector("#sidebar");
-  const template = document.querySelector("#folderTemplate");
-  const domFragment = template.content.cloneNode(true);
-
-  //  set folder ID
-  const folderContainer = domFragment.querySelector(".folderContainer");
-  folderContainer.classList.add(uniqueId);
-
-  //  set folder title
-  const folderTitle = domFragment.querySelector(".folderTitle");
-  folderTitle.innerText = groupTitle.value;
-
-  sideBarContainer.appendChild(domFragment);
 }
 
 //Display Mobile menu
