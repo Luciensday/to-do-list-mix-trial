@@ -1,6 +1,5 @@
 // Deafult Groups
 const deafultGroups = [{ groupName: "Work" }, { groupName: "Personal" }];
-
 let defaultHideCompleted = true; // A flag to set the default state to hide completed
 let groups = [];
 
@@ -8,11 +7,6 @@ let groups = [];
 function findGroupById(groupId) {
   return groups.find((g) => g.id == groupId);
 }
-
-//Display Mobile menu
-const menu = document.querySelector("#mobile-menu");
-const menuLinks = document.querySelector(".sidebar");
-
 // Unique Id Counters
 let groupId = 1;
 let taskId = 1;
@@ -39,6 +33,31 @@ showHideCompleted.addEventListener("click", function () {
     showHideCompleted.textContent = "show completed";
     hideCompleted();
   }
+});
+
+function hideCompleted() {
+  defaultHideCompleted = true; // Set the flag to hide completed items
+  const completedItems = document.querySelectorAll(".complete");
+  completedItems.forEach((item) => item.classList.add("hidden"));
+}
+function showCompleted() {
+  defaultHideCompleted = false; // Set the flag to show completed items
+  const completedItems = document.querySelectorAll(".complete");
+  completedItems.forEach((item) => item.classList.remove("hidden"));
+  // updateListOrder(); // Move completed items to the top
+}
+
+// Create initial default groups
+window.addEventListener("load", () => {
+  deafultGroups.forEach((element) => {
+    createGroupUsingTemplate(element.groupName);
+  });
+});
+
+// Add new group button
+const newGroupButton = document.getElementById("createGroupButton");
+newGroupButton.addEventListener("click", () => {
+  createGroupUsingTemplate();
 });
 
 // first: group is created
@@ -210,20 +229,7 @@ function circleToggledItemAppareance(
 
   // Move the taskItem to the top of the task list within its group
   taskList.insertBefore(taskItem, taskList.firstChild);
-
   save();
-}
-
-function hideCompleted() {
-  defaultHideCompleted = true; // Set the flag to hide completed items
-  const completedItems = document.querySelectorAll(".complete");
-  completedItems.forEach((item) => item.classList.add("hidden"));
-}
-function showCompleted() {
-  defaultHideCompleted = false; // Set the flag to show completed items
-  const completedItems = document.querySelectorAll(".complete");
-  completedItems.forEach((item) => item.classList.remove("hidden"));
-  // updateListOrder(); // Move completed items to the top
 }
 
 function handleTaskDeleteButton(item, taskItem, containerElement) {
@@ -258,18 +264,9 @@ function createFolder(groupTitle, uniqueId) {
   sideBarContainer.appendChild(domFragment);
 }
 
-// Create initial default groups
-window.addEventListener("load", (event) => {
-  deafultGroups.forEach((element) => {
-    createGroupUsingTemplate(element.groupName);
-  });
-});
-
-// Add new group button
-const newGroupButton = document.getElementById("createGroupButton");
-newGroupButton.addEventListener("click", (event) => {
-  createGroupUsingTemplate();
-});
+//Display Mobile menu
+const menu = document.querySelector("#mobile-menu");
+const menuLinks = document.querySelector(".sidebar");
 
 //Enter works like "tab"
 function focusNextElement(element) {
