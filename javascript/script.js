@@ -68,8 +68,8 @@ function createGroupUsingTemplate(groupName) {
   if (groupName) {
     groupTitle.value = groupName;
   }
-
   let folderTitle = createFolder(groupTitle, uniqueId);
+  //foler name can change simutaneously when user edit the group name
   groupTitle.addEventListener("input", function () {
     folderTitle.innerText = groupTitle.value;
   });
@@ -143,9 +143,29 @@ function createFolder(groupTitle, uniqueId) {
   const folderContainer = domFragment.querySelector(".folderContainer");
   folderContainer.setAttribute("id", `folder${uniqueId}`);
 
+  //set folder eventlistener
+  folderContainer.addEventListener("click", (event) => {
+    const targetButton = event.target;
+    const targetGroupId = targetButton.id.replace(/folder/, "");
+
+    const allGroups = document.querySelectorAll(".tasksContainer");
+    allGroups.forEach((group) => {
+      if (group.id !== targetGroupId) {
+        group.style.display = "none"; // Hide the item
+      } else if (group.id === targetGroupId) {
+        group.style.display = "block";
+      }
+    });
+    console.log(
+      `target is ${targetGroupId} orignal stuff is ${targetButton.id}`,
+    );
+  });
+
   //  set folder title
   const folderTitle = domFragment.querySelector(".folderTitle");
   folderTitle.innerText = groupTitle.value;
+
+  //
 
   sideBarContainer.appendChild(domFragment);
   return folderTitle;
