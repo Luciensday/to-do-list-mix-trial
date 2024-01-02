@@ -91,20 +91,41 @@ function createGroupUsingTemplate(groupName) {
   });
 
   // Assign an ID
+  // Assign ID to the container
   domFragment.querySelector(".tasksContainer").id = uniqueId;
+  // Assign ID to the task input and add eventlistener to it
   domFragment.querySelector(".addTaskField").id = `addTaskField-${uniqueId}`;
   const field = domFragment.querySelector(".addTaskField");
-  field.addEventListener("keypress", (event) =>
-    handleAddTaskFieldEnter(event, `#${uniqueId}`),
-  );
+  const group = `#${uniqueId}`;
+  field.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      const inputField = event.target;
+      const taskText = inputField.value.trim();
+
+      const item = {
+        id: generateUniqueTaskID(),
+        text: taskText,
+        complete: false,
+        category: group,
+      };
+
+      if (taskText && group)
+        // Create and add the task
+        createTaskUsingTemplate(item, group);
+
+      // Clear the input field after adding the task
+      inputField.value = "";
+      save();
+    }
+  });
 
   containerElement.appendChild(domFragment);
 
-  // After appending, set the focus on the group title
-  // Using requestAnimationFrame to ensure the focus occurs after any reflows or repaints
-  requestAnimationFrame(() => {
-    groupTitle.focus();
-  });
+  // // After appending, set the focus on the group title
+  // // Using requestAnimationFrame to ensure the focus occurs after any reflows or repaints
+  // requestAnimationFrame(() => {
+  //   groupTitle.focus();
+  // });
 
   // Update the groups array
   groups.push({
@@ -114,29 +135,6 @@ function createGroupUsingTemplate(groupName) {
   });
 
   createFolder(groupTitle, uniqueId);
-}
-
-// Function to handle the 'Enter' key in addTaskFields
-function handleAddTaskFieldEnter(event, group) {
-  if (event.key === "Enter") {
-    const inputField = event.target;
-    const taskText = inputField.value.trim();
-
-    const item = {
-      id: generateUniqueTaskID(),
-      text: taskText,
-      complete: false,
-      category: group,
-    };
-
-    if (taskText && group)
-      // Create and add the task
-      createTaskUsingTemplate(item, group);
-
-    // Clear the input field after adding the task
-    inputField.value = "";
-    save();
-  }
 }
 
 // Remove Task
