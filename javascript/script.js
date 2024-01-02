@@ -56,7 +56,7 @@ newGroupButton.addEventListener("click", () => {
 
 // first: group is created
 
-async function createGroupUsingTemplate(groupName) {
+function createGroupUsingTemplate(groupName) {
   const containerElement = document.querySelector(".groupsContainer");
   const template = document.querySelector("#groupTemplate");
   const domFragment = template.content.cloneNode(true);
@@ -68,9 +68,9 @@ async function createGroupUsingTemplate(groupName) {
   if (groupName) {
     groupTitle.value = groupName;
     groupTitle.setAttribute("tabindex", uniqueId.toString());
-    folderTitle = createFolder(groupTitle, uniqueId);
+    createFolder(groupTitle, uniqueId);
   } else {
-    folderTitle = createFolder(groupTitle, uniqueId);
+    let folderTitle = createFolder(groupTitle, uniqueId);
     groupTitle.addEventListener("input", function () {
       folderTitle.innerText = groupTitle.value;
     });
@@ -78,10 +78,14 @@ async function createGroupUsingTemplate(groupName) {
 
   // Delete Button
   const deleteButton = domFragment.querySelector(".deleteGroupButton");
+
   deleteButton.addEventListener("click", () => {
     const groupElement = document.getElementById(uniqueId);
+    const groupFolderElement = document.getElementById(`folder${uniqueId}`);
+
     if (groupElement) {
       groupElement.remove(); // Removes the whole group container
+      groupFolderElement.remove();
     } else {
       console.error(`No element found with ID ${uniqueId}`);
     }
@@ -139,7 +143,7 @@ function createFolder(groupTitle, uniqueId) {
 
   //  set folder ID
   const folderContainer = domFragment.querySelector(".folderContainer");
-  folderContainer.classList.add(uniqueId);
+  folderContainer.setAttribute("id", `folder${uniqueId}`);
 
   //  set folder title
   const folderTitle = domFragment.querySelector(".folderTitle");
@@ -148,13 +152,6 @@ function createFolder(groupTitle, uniqueId) {
   sideBarContainer.appendChild(domFragment);
   return folderTitle;
 }
-// // Remove Task
-// function deleteTask(event) {
-//   const task = event.target;
-//   if (task.value.length === 0) {
-//     task.parentElement.remove();
-//   }
-// }
 
 // Create task
 function createTaskUsingTemplate(item, group) {
