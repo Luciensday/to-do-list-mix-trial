@@ -67,14 +67,12 @@ function createGroupUsingTemplate(groupName) {
 
   if (groupName) {
     groupTitle.value = groupName;
-    groupTitle.setAttribute("tabindex", uniqueId.toString());
-    createFolder(groupTitle, uniqueId);
-  } else {
-    let folderTitle = createFolder(groupTitle, uniqueId);
-    groupTitle.addEventListener("input", function () {
-      folderTitle.innerText = groupTitle.value;
-    });
   }
+
+  let folderTitle = createFolder(groupTitle, uniqueId);
+  groupTitle.addEventListener("input", function () {
+    folderTitle.innerText = groupTitle.value;
+  });
 
   // Delete Button
   const deleteButton = domFragment.querySelector(".deleteGroupButton");
