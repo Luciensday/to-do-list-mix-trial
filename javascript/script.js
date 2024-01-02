@@ -1,6 +1,5 @@
 // Deafult Groups
 const deafultGroups = [{ groupName: "Work" }, { groupName: "Personal" }];
-let defaultHideCompleted = true; // A flag to set the default state to hide completed
 let groups = [];
 
 // Function to find a group by ID
@@ -23,14 +22,17 @@ function generateUniqueGroupID() {
   return uniqueGroupID;
 }
 
+let defaultHideCompleted = true; // A flag to set the default state to hide completed
 let showHideCompleted = document.querySelector("#showHideCompleted");
-// Show/hind button change text
+
 showHideCompleted.addEventListener("click", function () {
+  //click to hide
   if (showHideCompleted.textContent == "show completed") {
     showHideCompleted.textContent = "hide completed";
     defaultHideCompleted = false; // Set the flag to show completed items
     const completedItems = document.querySelectorAll(".complete");
     completedItems.forEach((item) => item.classList.remove("hidden"));
+    //click to show
   } else if (showHideCompleted.textContent == "hide completed") {
     showHideCompleted.textContent = "show completed";
     defaultHideCompleted = true; // Set the flag to hide completed items
@@ -46,7 +48,7 @@ window.addEventListener("load", () => {
   });
 });
 
-// Add new group button
+// Eventlistener for create group button
 const newGroupButton = document.getElementById("createGroupButton");
 newGroupButton.addEventListener("click", () => {
   createGroupUsingTemplate();
@@ -79,7 +81,14 @@ function createGroupUsingTemplate(groupName) {
 
   // Delete Button
   const deleteButton = domFragment.querySelector(".deleteGroupButton");
-  deleteButton.addEventListener("click", () => deleteGroup(uniqueId));
+  deleteButton.addEventListener("click", () => {
+    const groupElement = document.getElementById(uniqueId);
+    if (groupElement) {
+      groupElement.remove(); // Removes the whole group container
+    } else {
+      console.error(`No element found with ID ${uniqueId}`);
+    }
+  });
 
   // Assign an ID
   domFragment.querySelector(".tasksContainer").id = uniqueId;
@@ -105,16 +114,6 @@ function createGroupUsingTemplate(groupName) {
   });
 
   createFolder(groupTitle, uniqueId);
-}
-
-// Delete Group
-function deleteGroup(groupId) {
-  const groupElement = document.getElementById(groupId);
-  if (groupElement) {
-    groupElement.remove(); // Removes the whole group container
-  } else {
-    console.error(`No element found with ID ${groupId}`);
-  }
 }
 
 // Function to handle the 'Enter' key in addTaskFields
