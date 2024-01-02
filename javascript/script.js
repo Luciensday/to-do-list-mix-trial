@@ -28,24 +28,16 @@ let showHideCompleted = document.querySelector("#showHideCompleted");
 showHideCompleted.addEventListener("click", function () {
   if (showHideCompleted.textContent == "show completed") {
     showHideCompleted.textContent = "hide completed";
-    showCompleted();
-  } else {
+    defaultHideCompleted = false; // Set the flag to show completed items
+    const completedItems = document.querySelectorAll(".complete");
+    completedItems.forEach((item) => item.classList.remove("hidden"));
+  } else if (showHideCompleted.textContent == "hide completed") {
     showHideCompleted.textContent = "show completed";
-    hideCompleted();
+    defaultHideCompleted = true; // Set the flag to hide completed items
+    const completedItems = document.querySelectorAll(".complete");
+    completedItems.forEach((item) => item.classList.add("hidden"));
   }
 });
-
-function hideCompleted() {
-  defaultHideCompleted = true; // Set the flag to hide completed items
-  const completedItems = document.querySelectorAll(".complete");
-  completedItems.forEach((item) => item.classList.add("hidden"));
-}
-function showCompleted() {
-  defaultHideCompleted = false; // Set the flag to show completed items
-  const completedItems = document.querySelectorAll(".complete");
-  completedItems.forEach((item) => item.classList.remove("hidden"));
-  // updateListOrder(); // Move completed items to the top
-}
 
 // Create initial default groups
 window.addEventListener("load", () => {
