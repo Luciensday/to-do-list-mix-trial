@@ -43,6 +43,11 @@ showHideCompleted.addEventListener("click", function () {
 
 // Create initial default groups
 window.addEventListener("load", () => {
+  const inputElement = document.createElement("input");
+  inputElement.value = "all";
+
+  createFolder(inputElement, "all");
+
   deafultGroups.forEach((element) => {
     createGroupUsingTemplate(element.groupName);
   });
@@ -164,7 +169,9 @@ function createFolder(groupTitle, uniqueId) {
 
   //  set folder title
   const folderTitle = domFragment.querySelector(".folderTitle");
+
   folderTitle.innerText = groupTitle.value;
+  console.log(`what is folderTitle ${folderTitle}`);
 
   //
 
