@@ -145,7 +145,8 @@ function createFolder(groupTitle, uniqueId) {
 
   //set folder eventlistener
   folderContainer.addEventListener("click", (event) => {
-    const targetButton = event.target;
+    const targetButton = event.target.closest(".folderContainer");
+    // if (!targetButton) return; // Ignore clicks outside of the .folderContainer
     const targetGroupId = targetButton.id.replace(/folder/, "");
 
     const allGroups = document.querySelectorAll(".tasksContainer");
