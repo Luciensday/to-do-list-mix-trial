@@ -1,6 +1,7 @@
 // Deafult Groups
 const deafultGroups = [{ groupName: "Work" }, { groupName: "Personal" }];
 let groups = [];
+let savedGroups = JSON.parse(localStorage.getItem("groups"));
 
 // Function to find a group by ID
 function findGroupById(groupId) {
@@ -52,26 +53,20 @@ window.addEventListener("load", () => {
   inputElement.value = "All";
   createFolder(inputElement, "all");
 
-  deafultGroups.forEach((element) => {
-    createGroupUsingTemplate(element.groupName);
-  });
-
-  // let savedGroups = JSON.parse(localStorage.getItem("groups"));
-
-  // //to create All folder
-  // if (!savedGroups || savedGroups.length === 0) {
-  //   deafultGroups.forEach((element) => {
-  //     createGroupUsingTemplate(element.groupName);
-  //   });
-  // } else {
-  //   groups = savedGroups;
-  //   groups.forEach((group) => {
-  //     createGroupUsingTemplate(group.name);
-  //     group.tasks.forEach((task) => {
-  //       createTaskUsingTemplate(task, `#${group.id}`);
-  //     });
-  //   });
-  // }
+  //to create All folder
+  if (!savedGroups || savedGroups.length === 0) {
+    deafultGroups.forEach((element) => {
+      createGroupUsingTemplate(element.groupName);
+    });
+  } else {
+    groups = savedGroups;
+    groups.forEach((group) => {
+      createGroupUsingTemplate(group.name);
+      group.tasks.forEach((task) => {
+        createTaskUsingTemplate(task, `#${group.id}`);
+      });
+    });
+  }
 });
 
 // Eventlistener for create group button
