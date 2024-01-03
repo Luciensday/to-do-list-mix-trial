@@ -4,12 +4,16 @@ let groups = [];
 
 // Function to find a group by ID
 function findGroupById(groupId) {
-  return groups.find((g) => g.id == groupId);
+  return groups.find((g) => g.id === groupId);
 }
 
 // Unique Id Counters
 let groupId = 1;
 let taskId = 1;
+
+function save() {
+  localStorage.setItem("groups", JSON.stringify(groups));
+}
 
 function generateUniqueTaskID() {
   const uniqueTaskID = `task-${taskId}`;
@@ -44,15 +48,30 @@ showHideCompleted.addEventListener("click", function () {
 
 // Create initial default groups
 window.addEventListener("load", () => {
-  //to create All folder
   const inputElement = document.createElement("input");
   inputElement.value = "All";
-
   createFolder(inputElement, "all");
 
   deafultGroups.forEach((element) => {
     createGroupUsingTemplate(element.groupName);
   });
+
+  // let savedGroups = JSON.parse(localStorage.getItem("groups"));
+
+  // //to create All folder
+  // if (!savedGroups || savedGroups.length === 0) {
+  //   deafultGroups.forEach((element) => {
+  //     createGroupUsingTemplate(element.groupName);
+  //   });
+  // } else {
+  //   groups = savedGroups;
+  //   groups.forEach((group) => {
+  //     createGroupUsingTemplate(group.name);
+  //     group.tasks.forEach((task) => {
+  //       createTaskUsingTemplate(task, `#${group.id}`);
+  //     });
+  //   });
+  // }
 });
 
 // Eventlistener for create group button
@@ -83,21 +102,17 @@ function createGroupUsingTemplate(groupName) {
 
   // Delete group Button
   const deleteButton = domFragment.querySelector(".deleteGroupButton");
-
   deleteButton.addEventListener("click", () => {
     const groupElement = document.getElementById(uniqueId);
     const groupFolderElement = document.getElementById(`folder${uniqueId}`);
-
     // const groupToRemoveFromArray = findGroupById(uniqueId);
     const targetGroupIndex = groups.findIndex((g) => (g.id = uniqueId));
     if (targetGroupIndex !== -1) {
       groups.splice(targetGroupIndex, 1);
-
       groupElement.remove(); // Removes the whole group container
       groupFolderElement.remove();
+      save();
     }
-    console.log(groups);
-    save();
   });
 
   // Assign an ID
@@ -126,11 +141,9 @@ function createGroupUsingTemplate(groupName) {
       // Clear the input field after adding the task
       inputField.value = "";
       console.log(groups);
-      save();
     }
+    save();
   });
-
-  containerElement.appendChild(domFragment);
 
   // Update the groups array
   groups.push({
@@ -138,9 +151,8 @@ function createGroupUsingTemplate(groupName) {
     name: groupName || "",
     tasks: [],
   });
-
-  // let allGroupId = groups.map((group) => group.id)
-  console.log(groups);
+  save();
+  containerElement.appendChild(domFragment);
 }
 
 function createFolder(groupTitle, uniqueId) {
@@ -174,9 +186,9 @@ function createFolder(groupTitle, uniqueId) {
 
   //  set folder title
   const folderTitle = domFragment.querySelector(".folderTitle");
-
   folderTitle.innerText = groupTitle.value;
 
+  save();
   //
 
   sideBarContainer.appendChild(domFragment);
