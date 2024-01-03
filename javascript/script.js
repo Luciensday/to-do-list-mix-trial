@@ -6,6 +6,7 @@ let groups = [];
 function findGroupById(groupId) {
   return groups.find((g) => g.id == groupId);
 }
+
 // Unique Id Counters
 let groupId = 1;
 let taskId = 1;
@@ -80,19 +81,23 @@ function createGroupUsingTemplate(groupName) {
     folderTitle.innerText = groupTitle.value;
   });
 
-  // Delete Button
+  // Delete group Button
   const deleteButton = domFragment.querySelector(".deleteGroupButton");
 
   deleteButton.addEventListener("click", () => {
     const groupElement = document.getElementById(uniqueId);
     const groupFolderElement = document.getElementById(`folder${uniqueId}`);
 
-    if (groupElement) {
+    // const groupToRemoveFromArray = findGroupById(uniqueId);
+    const targetGroupIndex = groups.findIndex((g) => (g.id = uniqueId));
+    if (targetGroupIndex !== -1) {
+      groups.splice(targetGroupIndex, 1);
+
       groupElement.remove(); // Removes the whole group container
       groupFolderElement.remove();
-    } else {
-      console.error(`No element found with ID ${uniqueId}`);
     }
+    console.log(groups);
+    save();
   });
 
   // Assign an ID
@@ -120,17 +125,12 @@ function createGroupUsingTemplate(groupName) {
 
       // Clear the input field after adding the task
       inputField.value = "";
+      console.log(groups);
       save();
     }
   });
 
   containerElement.appendChild(domFragment);
-
-  // // After appending, set the focus on the group title
-  // // Using requestAnimationFrame to ensure the focus occurs after any reflows or repaints
-  // requestAnimationFrame(() => {
-  //   groupTitle.focus();
-  // });
 
   // Update the groups array
   groups.push({
@@ -138,6 +138,9 @@ function createGroupUsingTemplate(groupName) {
     name: groupName || "",
     tasks: [],
   });
+
+  // let allGroupId = groups.map((group) => group.id)
+  console.log(groups);
 }
 
 function createFolder(groupTitle, uniqueId) {
@@ -173,7 +176,6 @@ function createFolder(groupTitle, uniqueId) {
   const folderTitle = domFragment.querySelector(".folderTitle");
 
   folderTitle.innerText = groupTitle.value;
-  console.log(`what is folderTitle ${folderTitle}`);
 
   //
 
@@ -213,7 +215,17 @@ function createTaskUsingTemplate(item, group) {
   // remove Task
   const deleteTaskButton = domFragment.querySelector(".deleteTaskButton");
   deleteTaskButton.addEventListener("click", () => {
-    handleTaskDeleteButton(item, taskItem, containerElement);
+    const currentGroup = findGroupById(containerElement.id);
+    const groupArray = currentGroup.tasks;
+    console.log(groupArray);
+    const itemIndex = groupArray.findIndex((t) => t.id === item.id);
+    if (itemIndex !== -1) {
+      // Remove the item from the toDo array
+      groupArray.splice(itemIndex, 1);
+      // Update the DOM
+      taskItem.remove();
+      save();
+    }
   });
 
   taskList.appendChild(domFragment);
@@ -255,22 +267,6 @@ function circleToggledItemAppareance(
   // Move the taskItem to the top of the task list within its group
   taskList.insertBefore(taskItem, taskList.firstChild);
   save();
-}
-
-function handleTaskDeleteButton(item, taskItem, containerElement) {
-  // Find the index of the item to be removed
-  const currentGroup = findGroupById(containerElement.id);
-  const groupArray = currentGroup.tasks;
-
-  console.log(groupArray);
-  const itemIndex = groupArray.findIndex((t) => t.id === item.id);
-  if (itemIndex !== -1) {
-    // Remove the item from the toDo array
-    groupArray.splice(itemIndex, 1);
-    // Update the DOM
-    taskItem.remove();
-    save();
-  }
 }
 
 //Display Mobile menu
