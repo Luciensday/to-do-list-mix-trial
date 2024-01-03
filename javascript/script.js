@@ -43,8 +43,9 @@ showHideCompleted.addEventListener("click", function () {
 
 // Create initial default groups
 window.addEventListener("load", () => {
+  //to create All folder
   const inputElement = document.createElement("input");
-  inputElement.value = "all";
+  inputElement.value = "All";
 
   createFolder(inputElement, "all");
 
@@ -148,15 +149,16 @@ function createFolder(groupTitle, uniqueId) {
   const folderContainer = domFragment.querySelector(".folderContainer");
   folderContainer.setAttribute("id", `folder${uniqueId}`);
 
-  //set folder eventlistener
+  //set folder eventlistener to filter
   folderContainer.addEventListener("click", (event) => {
     const targetButton = event.target.closest(".folderContainer");
     // if (!targetButton) return; // Ignore clicks outside of the .folderContainer
     const targetGroupId = targetButton.id.replace(/folder/, "");
-
     const allGroups = document.querySelectorAll(".tasksContainer");
     allGroups.forEach((group) => {
-      if (group.id !== targetGroupId) {
+      if (targetButton.id == "folderall") {
+        group.style.display = "block";
+      } else if (group.id !== targetGroupId) {
         group.style.display = "none"; // Hide the item
       } else if (group.id === targetGroupId) {
         group.style.display = "block";
