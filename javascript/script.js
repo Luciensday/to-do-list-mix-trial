@@ -1,7 +1,10 @@
+//------ below are global variable and stand alone functions
+
 // Deafult Groups
 const deafultGroups = [{ groupName: "Work" }, { groupName: "Personal" }];
+
+//groups array hold group object including tasks property
 let groups = [];
-let savedGroups = JSON.parse(localStorage.getItem("groups"));
 
 // Function to find a group by ID
 function findGroupById(groupId) {
@@ -47,16 +50,21 @@ showHideCompleted.addEventListener("click", function () {
   }
 });
 
-// Create initial default groups
+// ----- load: creat "All" folder(is not in groups data, only serve as filter)
 window.addEventListener("load", () => {
   const inputElement = document.createElement("input");
   inputElement.value = "All";
   createFolder(inputElement, "all");
 
+  let savedGroups = JSON.parse(localStorage.getItem("groups"));
+  console.log(`check saved groups after reload ${savedGroups}`);
+
   //to create All folder
   if (!savedGroups || savedGroups.length === 0) {
     deafultGroups.forEach((element) => {
       createGroupUsingTemplate(element.groupName);
+      console.log(`check groups ${groups}`);
+      console.log(`check saved groups after reload ${savedGroups}`);
     });
   } else {
     groups = savedGroups;
@@ -69,14 +77,13 @@ window.addEventListener("load", () => {
   }
 });
 
-// Eventlistener for create group button
+//--- user interaction start from here:  Eventlistener of group creating button
 const newGroupButton = document.getElementById("createGroupButton");
 newGroupButton.addEventListener("click", () => {
   createGroupUsingTemplate();
 });
 
-// first: group is created
-
+// first: create group
 function createGroupUsingTemplate(groupName) {
   const containerElement = document.querySelector(".groupsContainer");
   const template = document.querySelector("#groupTemplate");
@@ -86,6 +93,7 @@ function createGroupUsingTemplate(groupName) {
   const groupTitle = domFragment.querySelector(".groupTitle");
   const uniqueId = generateUniqueGroupID();
 
+  // in the case of default group that has default groupName data
   if (groupName) {
     groupTitle.value = groupName;
   }
@@ -94,13 +102,11 @@ function createGroupUsingTemplate(groupName) {
   groupTitle.addEventListener("input", function () {
     folderTitle.innerText = groupTitle.value;
   });
-
   // Delete group Button
   const deleteButton = domFragment.querySelector(".deleteGroupButton");
   deleteButton.addEventListener("click", () => {
     const groupElement = document.getElementById(uniqueId);
     const groupFolderElement = document.getElementById(`folder${uniqueId}`);
-    // const groupToRemoveFromArray = findGroupById(uniqueId);
     const targetGroupIndex = groups.findIndex((g) => (g.id = uniqueId));
     if (targetGroupIndex !== -1) {
       groups.splice(targetGroupIndex, 1);
@@ -110,8 +116,7 @@ function createGroupUsingTemplate(groupName) {
     }
   });
 
-  // Assign an ID
-  // Assign ID to the container
+  // Assign ID to the group container
   domFragment.querySelector(".tasksContainer").id = uniqueId;
   // Assign ID to the task input and add eventlistener to it
   domFragment.querySelector(".addTaskField").id = `addTaskField-${uniqueId}`;
@@ -121,7 +126,6 @@ function createGroupUsingTemplate(groupName) {
     if (event.key === "Enter") {
       const inputField = event.target;
       const taskText = inputField.value.trim();
-
       const item = {
         id: generateUniqueTaskID(),
         text: taskText,
@@ -135,7 +139,6 @@ function createGroupUsingTemplate(groupName) {
 
       // Clear the input field after adding the task
       inputField.value = "";
-      console.log(groups);
     }
     save();
   });
