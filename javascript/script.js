@@ -64,8 +64,8 @@ window.addEventListener("load", () => {
   if (!savedGroups || savedGroups.length === 0) {
     deafultGroups.forEach((element) => {
       createGroupUsingTemplate(element.groupName);
-      console.log(`check groups ${groups}`);
-      console.log(`check saved groups after reload ${savedGroups}`);
+      console.log(`after refresh: check groups ${groups}`);
+      console.log(`${savedGroups}`);
     });
   } else {
     groups = savedGroups;
