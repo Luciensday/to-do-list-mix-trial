@@ -16,7 +16,7 @@ let groupId = 1;
 let taskId = 1;
 
 function save() {
-  localStorage.setItem("groups", JSON.stringify(groups));
+  localStorage.setItem("savedGroupsData", JSON.stringify(groups));
 }
 
 function generateUniqueTaskID() {
@@ -31,6 +31,7 @@ function generateUniqueGroupID() {
   return uniqueGroupID;
 }
 
+// Hide and show toggle
 let defaultHideCompleted = true; // A flag to set the default state to hide completed
 let showHideCompleted = document.querySelector("#showHideCompleted");
 
@@ -56,7 +57,7 @@ window.addEventListener("load", () => {
   inputElement.value = "All";
   createFolder(inputElement, "all");
 
-  let savedGroups = JSON.parse(localStorage.getItem("groups"));
+  let savedGroups = JSON.parse(localStorage.getItem("savedGroupsData"));
   console.log(`check saved groups after reload ${savedGroups}`);
 
   //to create All folder
@@ -133,10 +134,9 @@ function createGroupUsingTemplate(groupName) {
         category: group,
       };
 
-      if (taskText && group)
-        // Create and add the task
+      if (taskText && group) {
         createTaskUsingTemplate(item, group);
-
+      }
       // Clear the input field after adding the task
       inputField.value = "";
     }
@@ -158,14 +158,13 @@ function createFolder(groupTitle, uniqueId) {
   const template = document.querySelector("#folderTemplate");
   const domFragment = template.content.cloneNode(true);
 
-  //  set folder ID
+  // set folder ID
   const folderContainer = domFragment.querySelector(".folderContainer");
   folderContainer.setAttribute("id", `folder${uniqueId}`);
 
   //set folder eventlistener to filter
   folderContainer.addEventListener("click", (event) => {
     const targetButton = event.target.closest(".folderContainer");
-    // if (!targetButton) return; // Ignore clicks outside of the .folderContainer
     const targetGroupId = targetButton.id.replace(/folder/, "");
     const allGroups = document.querySelectorAll(".tasksContainer");
     allGroups.forEach((group) => {
@@ -177,17 +176,12 @@ function createFolder(groupTitle, uniqueId) {
         group.style.display = "block";
       }
     });
-    console.log(
-      `target is ${targetGroupId} orignal stuff is ${targetButton.id}`,
-    );
   });
-
   //  set folder title
   const folderTitle = domFragment.querySelector(".folderTitle");
   folderTitle.innerText = groupTitle.value;
 
   save();
-  //
 
   sideBarContainer.appendChild(domFragment);
   return folderTitle;
@@ -198,7 +192,6 @@ function createTaskUsingTemplate(item, group) {
   //goup is an id number, e.g #${uniqueId}
   const containerElement = document.querySelector(group);
   const taskList = containerElement.querySelector(".listToDo");
-
   const template = document.querySelector("#taskTemplate");
   const domFragment = template.content.cloneNode(true);
   const field = domFragment.querySelector(".taskText");
@@ -213,13 +206,23 @@ function createTaskUsingTemplate(item, group) {
     taskItem.classList.add("complete");
   }
   taskCircle.addEventListener("click", (event) => {
-    circleToggledItemAppareance(
-      event,
-      item,
-      taskItem,
-      taskCircle,
-      containerElement,
-    );
+    item.complete = !item.complete; // Toggle the complete property
+    if (item.complete) {
+      taskItem.classList.add("complete");
+      taskCircle.classList.add("complete-circle");
+    } else {
+      taskItem.classList.remove("complete");
+      taskCircle.classList.remove("complete-circle");
+    }
+
+    // Find the group's task list
+    const taskList = containerElement.querySelector(".listToDo");
+    if (defaultHideCompleted) {
+      taskItem.classList.add("hidden");
+    }
+    // Move the taskItem to the top of the task list within its group
+    taskList.insertBefore(taskItem, taskList.firstChild);
+    save();
   });
 
   // remove Task
@@ -249,56 +252,25 @@ function createTaskUsingTemplate(item, group) {
   }
 }
 
-function circleToggledItemAppareance(
-  event,
-  item,
-  taskItem,
-  taskCircle,
-  containerElement,
-) {
-  item.complete = !item.complete; // Toggle the complete property
-  if (item.complete) {
-    taskItem.classList.add("complete");
-    taskCircle.classList.add("complete-circle");
-  } else {
-    taskItem.classList.remove("complete");
-    taskCircle.classList.remove("complete-circle");
-  }
+// unuse function: comment out for the moment if to apply in future revist them
 
-  // Find the group's task list
+// //Display Mobile menu
+// const menu = document.querySelector("#mobile-menu");
+// const menuLinks = document.querySelector(".sidebar");
 
-  const taskList = containerElement.querySelector(".listToDo");
+// //Enter works like "tab"
+// function focusNextElement(element) {
+//   // Get all focusable elements
+//   const focusableElements = Array.from(
+//     document.querySelectorAll(
+//       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+//     ),
+//   );
 
-  if (defaultHideCompleted) {
-    // If it's set to hide completed by default, hide the item.
-    taskItem.classList.add("hidden");
-  }
-
-  // Move the taskItem to the top of the task list within its group
-  taskList.insertBefore(taskItem, taskList.firstChild);
-  save();
-}
-
-//Display Mobile menu
-const menu = document.querySelector("#mobile-menu");
-const menuLinks = document.querySelector(".sidebar");
-
-//Enter works like "tab"
-function focusNextElement(element) {
-  // Get all focusable elements
-  const focusableElements = Array.from(
-    document.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    ),
-  );
-
-  const index = focusableElements.indexOf(element);
-
-  if (index > -1) {
-    // Focus the next focusable element; if there's no next element, focus the first one
-    const nextElement = focusableElements[index + 1] || focusableElements[0];
-    nextElement.focus();
-  }
-}
-
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<Don't test above
+//   const index = focusableElements.indexOf(element);
+//   if (index > -1) {
+//     // Focus the next focusable element; if there's no next element, focus the first one
+//     const nextElement = focusableElements[index + 1] || focusableElements[0];
+//     nextElement.focus();
+//   }
+// }
