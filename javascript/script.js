@@ -58,14 +58,17 @@ window.addEventListener("load", () => {
   createFolder(inputElement, "all");
 
   let savedGroups = JSON.parse(localStorage.getItem("savedGroupsData"));
-  console.log(`check saved groups after reload ${savedGroups}`);
+  console.log(`saveGroups in load block a create all folder`);
+  console.log(savedGroups);
+  console.log(groups);
 
   //to create All folder
   if (!savedGroups || savedGroups.length === 0) {
     deafultGroups.forEach((element) => {
       createGroupUsingTemplate(element.groupName);
-      console.log(`after refresh: check groups ${groups}`);
-      console.log(`${savedGroups}`);
+      console.log(`saveGroups in load block if savegroups has no element`);
+      console.log(savedGroups);
+      console.log(groups);
     });
   } else {
     groups = savedGroups;
