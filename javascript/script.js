@@ -53,6 +53,7 @@ showHideCompleted.addEventListener("click", function () {
 
 // ----- load: creat "All" folder(is not in groups data, only serve as filter)
 window.addEventListener("load", () => {
+  //to create All folder
   const inputElement = document.createElement("input");
   inputElement.value = "All";
   createFolder(inputElement, "all");
@@ -62,7 +63,6 @@ window.addEventListener("load", () => {
   console.log(savedGroups);
   console.log(groups);
 
-  //to create All folder
   if (!savedGroups || savedGroups.length === 0) {
     deafultGroups.forEach((element) => {
       createGroupUsingTemplate(element.groupName);
